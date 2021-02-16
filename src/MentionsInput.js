@@ -98,6 +98,8 @@ const propTypes = {
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]).isRequired,
+  renderInput: PropTypes.func,
+  renderTextarea: PropTypes.func,
 }
 
 class MentionsInput extends React.Component {
@@ -110,6 +112,8 @@ class MentionsInput extends React.Component {
     onKeyDown: () => null,
     onSelect: () => null,
     onBlur: () => null,
+    renderInput: () => null,
+    renderTextarea: () => null,
   }
 
   constructor(props) {
@@ -234,10 +238,18 @@ class MentionsInput extends React.Component {
   }
 
   renderInput = (props) => {
+    if (typeof this.props.renderInput === "function") {
+      return this.props.renderInput(props);
+    }
+
     return <input type="text" ref={this.setInputRef} {...props} />
   }
 
   renderTextarea = (props) => {
+    if (typeof this.props.renderTextarea === "function") {
+      return this.props.renderTextarea(props);
+    }
+
     return <textarea ref={this.setInputRef} {...props} />
   }
 
