@@ -112,8 +112,6 @@ class MentionsInput extends React.Component {
     onKeyDown: () => null,
     onSelect: () => null,
     onBlur: () => null,
-    renderInput: () => null,
-    renderTextarea: () => null,
   }
 
   constructor(props) {
@@ -239,7 +237,10 @@ class MentionsInput extends React.Component {
 
   renderInput = (props) => {
     if (typeof this.props.renderInput === "function") {
-      return this.props.renderInput(props);
+      return this.props.renderInput({
+        inputProps: props,
+        ref: this.setInputRef,
+      });
     }
 
     return <input type="text" ref={this.setInputRef} {...props} />
@@ -247,7 +248,10 @@ class MentionsInput extends React.Component {
 
   renderTextarea = (props) => {
     if (typeof this.props.renderTextarea === "function") {
-      return this.props.renderTextarea(props);
+      return this.props.renderTextarea({
+        inputProps: props,
+        ref: this.setInputRef,
+      });
     }
 
     return <textarea ref={this.setInputRef} {...props} />
