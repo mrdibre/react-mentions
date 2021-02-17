@@ -18,8 +18,22 @@ function SingleLine({ value, data, onChange, onAdd }) {
         style={defaultStyle}
         placeholder={"Mention people using '@'"}
         a11ySuggestionsListLabel={"Suggested mentions"}
+        allowSuggestionsAboveCursor
+        renderDropdown={({ children, ...props }) => {
+          console.log(props);
+          return (
+            <div style={{ background: "#000" }}>
+              {children}
+            </div>
+          );
+        }}
       >
-        <Mention data={data} onAdd={onAdd} style={defaultMentionStyle} />
+        <Mention
+          data={data}
+          onAdd={onAdd}
+          style={defaultMentionStyle}
+          renderSuggestion={(_, __, highlightedDisplay) => <span style={{ color: "blue", fontSize: 18 }}>{highlightedDisplay}</span>}
+        />
       </MentionsInput>
     </div>
   )

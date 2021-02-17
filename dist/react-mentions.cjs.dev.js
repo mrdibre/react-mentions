@@ -982,11 +982,9 @@ var styled$1 = createDefaultStyle({
 });
 var Suggestion$1 = styled$1(Suggestion);
 
-function LoadingIndicator() {
-  var styles = useStyles__default();
-  var spinnerStyles = styles('spinner');
-  return React__default.createElement("div", styles, React__default.createElement("div", spinnerStyles, React__default.createElement("div", spinnerStyles(['element', 'element1'])), React__default.createElement("div", spinnerStyles(['element', 'element2'])), React__default.createElement("div", spinnerStyles(['element', 'element3'])), React__default.createElement("div", spinnerStyles(['element', 'element4'])), React__default.createElement("div", spinnerStyles(['element', 'element5']))));
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var SuggestionsOverlay =
 /*#__PURE__*/
@@ -1006,7 +1004,7 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(SuggestionsOverlay)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    _defineProperty(_assertThisInitialized(_this), "handleMouseEnter", function (index, ev) {
+    _defineProperty(_assertThisInitialized(_this), "handleMouseEnter", function (index) {
       if (_this.props.onMouseEnter) {
         _this.props.onMouseEnter(index);
       }
@@ -1066,6 +1064,12 @@ function (_Component) {
         return null;
       }
 
+      var props = {
+        ref: this.setUlElement,
+        id: id,
+        role: "listbox",
+        "aria-label": a11ySuggestionsListLabel
+      };
       return React__default.createElement("div", _extends({}, useStyles.inline({
         position: position || 'absolute',
         left: left,
@@ -1073,12 +1077,10 @@ function (_Component) {
       }, style), {
         onMouseDown: onMouseDown,
         ref: containerRef
-      }), React__default.createElement("ul", _extends({
-        ref: this.setUlElement,
-        id: id,
-        role: "listbox",
-        "aria-label": a11ySuggestionsListLabel
-      }, style('list')), this.renderSuggestions()), this.renderLoadingIndicator());
+      }), this.props.renderDropdown ? this.props.renderDropdown(_objectSpread({}, props, {
+        isLoading: this.props.isLoading,
+        children: this.renderSuggestions()
+      })) : React__default.createElement("ul", _extends({}, props, style('list')), this.renderSuggestions()));
     }
   }, {
     key: "renderSuggestions",
@@ -1121,17 +1123,6 @@ function (_Component) {
         }
       });
     }
-  }, {
-    key: "renderLoadingIndicator",
-    value: function renderLoadingIndicator() {
-      if (!this.props.isLoading) {
-        return;
-      }
-
-      return React__default.createElement(LoadingIndicator, {
-        style: this.props.style('loadingIndicator')
-      });
-    }
   }]);
 
   return SuggestionsOverlay;
@@ -1153,7 +1144,8 @@ _defineProperty(SuggestionsOverlay, "propTypes", {
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({
     current: typeof Element === 'undefined' ? PropTypes.any : PropTypes.instanceOf(Element)
   })]),
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
+  renderDropdown: PropTypes.func
 });
 
 _defineProperty(SuggestionsOverlay, "defaultProps", {
@@ -1184,9 +1176,9 @@ var styled$2 = createDefaultStyle({
 });
 var SuggestionsOverlay$1 = styled$2(SuggestionsOverlay);
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 var makeTriggerRegex = function makeTriggerRegex(trigger) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -1236,6 +1228,7 @@ var propTypes = {
    * If set to `true` a regular text input element will be rendered
    * instead of a textarea
    */
+  renderDropdown: PropTypes.func,
   singleLine: PropTypes.bool,
   allowSpaceInQuery: PropTypes.bool,
   allowSuggestionsAboveCursor: PropTypes.bool,
@@ -1279,7 +1272,7 @@ function (_React$Component) {
 
       var props = omit(_this.props, ['style', 'classNames', 'className'], // substyle props
       keys(propTypes));
-      return _objectSpread({}, props, {}, style('input'), {
+      return _objectSpread$1({}, props, {}, style('input'), {
         value: _this.getPlainText()
       }, !readOnly && !disabled && {
         onChange: _this.handleChange,
@@ -1377,7 +1370,8 @@ function (_React$Component) {
         isLoading: _this.isLoading(),
         isOpened: _this.isOpened(),
         ignoreAccents: _this.props.ignoreAccents,
-        a11ySuggestionsListLabel: _this.props.a11ySuggestionsListLabel
+        a11ySuggestionsListLabel: _this.props.a11ySuggestionsListLabel,
+        renderDropdown: _this.props.renderDropdown
       }, _this.props.children);
 
       if (_this.props.suggestionsPortalHost) {
@@ -1829,7 +1823,7 @@ function (_React$Component) {
       if (queryId !== _this._queryId) return; // save in property so that multiple sync state updates from different mentions sources
       // won't overwrite each other
 
-      _this.suggestions = _objectSpread({}, _this.suggestions, _defineProperty({}, childIndex, {
+      _this.suggestions = _objectSpread$1({}, _this.suggestions, _defineProperty({}, childIndex, {
         queryInfo: {
           childIndex: childIndex,
           query: query,
@@ -2005,7 +1999,7 @@ function (_React$Component) {
       var newValue = spliceString(value, markupStartIndex, markupEndIndex, pastedMentions || pastedData).replace(/\r/g, '');
       var newPlainTextValue = getPlainText(newValue, config);
       var eventMock = {
-        target: _objectSpread({}, event.target, {
+        target: _objectSpread$1({}, event.target, {
           value: newValue
         })
       };
@@ -2070,7 +2064,7 @@ function (_React$Component) {
       var newValue = [value.slice(0, markupStartIndex), value.slice(markupEndIndex)].join('');
       var newPlainTextValue = getPlainText(newValue, config);
       var eventMock = {
-        target: _objectSpread({}, event.target, {
+        target: _objectSpread$1({}, event.target, {
           value: newPlainTextValue
         })
       };
@@ -2127,7 +2121,7 @@ var styled$3 = createDefaultStyle({
     letterSpacing: 'inherit'
   },
   '&multiLine': {
-    input: _objectSpread({
+    input: _objectSpread$1({
       height: '100%',
       bottom: 0,
       overflow: 'hidden',

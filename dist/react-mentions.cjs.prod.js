@@ -613,9 +613,27 @@ var styled$1 = createDefaultStyle({
   };
 }), Suggestion$1 = styled$1(Suggestion);
 
-function LoadingIndicator() {
-  var styles = useStyles__default(), spinnerStyles = styles("spinner");
-  return React__default.createElement("div", styles, React__default.createElement("div", spinnerStyles, React__default.createElement("div", spinnerStyles([ "element", "element1" ])), React__default.createElement("div", spinnerStyles([ "element", "element2" ])), React__default.createElement("div", spinnerStyles([ "element", "element3" ])), React__default.createElement("div", spinnerStyles([ "element", "element4" ])), React__default.createElement("div", spinnerStyles([ "element", "element5" ]))));
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(source, !0).forEach(function(key) {
+      _defineProperty(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(source).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
 }
 
 var SuggestionsOverlay = function(_Component) {
@@ -624,7 +642,7 @@ var SuggestionsOverlay = function(_Component) {
     _classCallCheck(this, SuggestionsOverlay);
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
     return _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(SuggestionsOverlay)).call.apply(_getPrototypeOf2, [ this ].concat(args))), 
-    _defineProperty(_assertThisInitialized(_this), "handleMouseEnter", function(index, ev) {
+    _defineProperty(_assertThisInitialized(_this), "handleMouseEnter", function(index) {
       _this.props.onMouseEnter && _this.props.onMouseEnter(index);
     }), _defineProperty(_assertThisInitialized(_this), "select", function(suggestion, queryInfo) {
       _this.props.onSelect(suggestion, queryInfo);
@@ -644,19 +662,24 @@ var SuggestionsOverlay = function(_Component) {
     key: "render",
     value: function() {
       var _this$props = this.props, id = _this$props.id, a11ySuggestionsListLabel = _this$props.a11ySuggestionsListLabel, isOpened = _this$props.isOpened, style = _this$props.style, onMouseDown = _this$props.onMouseDown, containerRef = _this$props.containerRef, position = _this$props.position, left = _this$props.left, top = _this$props.top;
-      return isOpened ? React__default.createElement("div", _extends({}, useStyles.inline({
+      if (!isOpened) return null;
+      var props = {
+        ref: this.setUlElement,
+        id: id,
+        role: "listbox",
+        "aria-label": a11ySuggestionsListLabel
+      };
+      return React__default.createElement("div", _extends({}, useStyles.inline({
         position: position || "absolute",
         left: left,
         top: top
       }, style), {
         onMouseDown: onMouseDown,
         ref: containerRef
-      }), React__default.createElement("ul", _extends({
-        ref: this.setUlElement,
-        id: id,
-        role: "listbox",
-        "aria-label": a11ySuggestionsListLabel
-      }, style("list")), this.renderSuggestions()), this.renderLoadingIndicator()) : null;
+      }), this.props.renderDropdown ? this.props.renderDropdown(_objectSpread({}, props, {
+        isLoading: this.props.isLoading,
+        children: this.renderSuggestions()
+      })) : React__default.createElement("ul", _extends({}, props, style("list")), this.renderSuggestions()));
     }
   }, {
     key: "renderSuggestions",
@@ -691,13 +714,6 @@ var SuggestionsOverlay = function(_Component) {
         }
       });
     }
-  }, {
-    key: "renderLoadingIndicator",
-    value: function() {
-      if (this.props.isLoading) return React__default.createElement(LoadingIndicator, {
-        style: this.props.style("loadingIndicator")
-      });
-    }
   } ]), SuggestionsOverlay;
 }(React.Component);
 
@@ -717,7 +733,8 @@ _defineProperty(SuggestionsOverlay, "propTypes", {
   containerRef: PropTypes.oneOfType([ PropTypes.func, PropTypes.shape({
     current: "undefined" == typeof Element ? PropTypes.any : PropTypes.instanceOf(Element)
   }) ]),
-  children: PropTypes.oneOfType([ PropTypes.element, PropTypes.arrayOf(PropTypes.element) ]).isRequired
+  children: PropTypes.oneOfType([ PropTypes.element, PropTypes.arrayOf(PropTypes.element) ]).isRequired,
+  renderDropdown: PropTypes.func
 }), _defineProperty(SuggestionsOverlay, "defaultProps", {
   suggestions: {},
   onSelect: function() {
@@ -739,7 +756,7 @@ var getID = function(suggestion) {
   }
 }), SuggestionsOverlay$1 = styled$2(SuggestionsOverlay);
 
-function ownKeys(object, enumerableOnly) {
+function ownKeys$1(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -750,12 +767,12 @@ function ownKeys(object, enumerableOnly) {
   return keys;
 }
 
-function _objectSpread(target) {
+function _objectSpread$1(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(source, !0).forEach(function(key) {
+    i % 2 ? ownKeys$1(source, !0).forEach(function(key) {
       _defineProperty(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(source).forEach(function(key) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(source).forEach(function(key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -782,6 +799,7 @@ var makeTriggerRegex = function(trigger) {
   UP: 38,
   DOWN: 40
 }, isComposing = !1, propTypes = {
+  renderDropdown: PropTypes.func,
   singleLine: PropTypes.bool,
   allowSpaceInQuery: PropTypes.bool,
   allowSuggestionsAboveCursor: PropTypes.bool,
@@ -807,7 +825,7 @@ var makeTriggerRegex = function(trigger) {
       _this.containerElement = el;
     }), _defineProperty(_assertThisInitialized(_this), "getInputProps", function() {
       var _this$props = _this.props, readOnly = _this$props.readOnly, disabled = _this$props.disabled, style = _this$props.style;
-      return _objectSpread({}, omit(_this.props, [ "style", "classNames", "className" ], keys(propTypes)), {}, style("input"), {
+      return _objectSpread$1({}, omit(_this.props, [ "style", "classNames", "className" ], keys(propTypes)), {}, style("input"), {
         value: _this.getPlainText()
       }, !readOnly && !disabled && {
         onChange: _this.handleChange,
@@ -867,7 +885,8 @@ var makeTriggerRegex = function(trigger) {
         isLoading: _this.isLoading(),
         isOpened: _this.isOpened(),
         ignoreAccents: _this.props.ignoreAccents,
-        a11ySuggestionsListLabel: _this.props.a11ySuggestionsListLabel
+        a11ySuggestionsListLabel: _this.props.a11ySuggestionsListLabel,
+        renderDropdown: _this.props.renderDropdown
       }, _this.props.children);
       return _this.props.suggestionsPortalHost ? ReactDOM.createPortal(suggestionsNode, _this.props.suggestionsPortalHost) : suggestionsNode;
     }), _defineProperty(_assertThisInitialized(_this), "renderHighlighter", function() {
@@ -1048,7 +1067,7 @@ var makeTriggerRegex = function(trigger) {
       syncResult instanceof Array && _this.updateSuggestions(_this._queryId, childIndex, query, querySequenceStart, querySequenceEnd, plainTextValue, syncResult);
     }), _defineProperty(_assertThisInitialized(_this), "updateSuggestions", function(queryId, childIndex, query, querySequenceStart, querySequenceEnd, plainTextValue, results) {
       if (queryId === _this._queryId) {
-        _this.suggestions = _objectSpread({}, _this.suggestions, _defineProperty({}, childIndex, {
+        _this.suggestions = _objectSpread$1({}, _this.suggestions, _defineProperty({}, childIndex, {
           queryInfo: {
             childIndex: childIndex,
             query: query,
@@ -1136,7 +1155,7 @@ var makeTriggerRegex = function(trigger) {
       if (event.target === this.inputElement && this.supportsClipboardActions(event)) {
         event.preventDefault();
         var _this$state3 = this.state, selectionStart = _this$state3.selectionStart, selectionEnd = _this$state3.selectionEnd, _this$props7 = this.props, value = _this$props7.value, children = _this$props7.children, config = readConfigFromChildren(children), markupStartIndex = mapPlainTextIndex(value, config, selectionStart, "START"), markupEndIndex = mapPlainTextIndex(value, config, selectionEnd, "END"), pastedMentions = event.clipboardData.getData("text/react-mentions"), pastedData = event.clipboardData.getData("text/plain"), newValue = spliceString(value, markupStartIndex, markupEndIndex, pastedMentions || pastedData).replace(/\r/g, ""), newPlainTextValue = getPlainText(newValue, config), eventMock = {
-          target: _objectSpread({}, event.target, {
+          target: _objectSpread$1({}, event.target, {
             value: newValue
           })
         };
@@ -1167,7 +1186,7 @@ var makeTriggerRegex = function(trigger) {
       if (event.target === this.inputElement && this.supportsClipboardActions(event)) {
         event.preventDefault(), this.saveSelectionToClipboard(event);
         var _this$state5 = this.state, selectionStart = _this$state5.selectionStart, selectionEnd = _this$state5.selectionEnd, _this$props9 = this.props, children = _this$props9.children, value = _this$props9.value, config = readConfigFromChildren(children), markupStartIndex = mapPlainTextIndex(value, config, selectionStart, "START"), markupEndIndex = mapPlainTextIndex(value, config, selectionEnd, "END"), newValue = [ value.slice(0, markupStartIndex), value.slice(markupEndIndex) ].join(""), newPlainTextValue = getPlainText(newValue, config), eventMock = {
-          target: _objectSpread({}, event.target, {
+          target: _objectSpread$1({}, event.target, {
             value: newPlainTextValue
           })
         };
@@ -1212,7 +1231,7 @@ var getComputedStyleLengthProp = function(forElement, propertyName) {
     letterSpacing: "inherit"
   },
   "&multiLine": {
-    input: _objectSpread({
+    input: _objectSpread$1({
       height: "100%",
       bottom: 0,
       overflow: "hidden",

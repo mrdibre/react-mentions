@@ -69,6 +69,7 @@ const propTypes = {
    * If set to `true` a regular text input element will be rendered
    * instead of a textarea
    */
+  renderDropdown: PropTypes.func,
   singleLine: PropTypes.bool,
   allowSpaceInQuery: PropTypes.bool,
   allowSuggestionsAboveCursor: PropTypes.bool,
@@ -297,6 +298,7 @@ class MentionsInput extends React.Component {
         isOpened={this.isOpened()}
         ignoreAccents={this.props.ignoreAccents}
         a11ySuggestionsListLabel={this.props.a11ySuggestionsListLabel}
+        renderDropdown={this.props.renderDropdown}
       >
         {this.props.children}
       </SuggestionsOverlay>

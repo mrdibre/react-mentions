@@ -5,7 +5,6 @@ import { defaultStyle } from './utils'
 
 import { getSuggestionHtmlId } from './utils'
 import Suggestion from './Suggestion'
-import LoadingIndicator from './LoadingIndicator'
 
 class SuggestionsOverlay extends Component {
   static propTypes = {
@@ -35,6 +34,7 @@ class SuggestionsOverlay extends Component {
       PropTypes.element,
       PropTypes.arrayOf(PropTypes.element),
     ]).isRequired,
+    renderDropdown: PropTypes.func,
   }
 
   static defaultProps = {
@@ -84,23 +84,33 @@ class SuggestionsOverlay extends Component {
       return null
     }
 
+    const props = {
+      ref: this.setUlElement,
+      id,
+      role: "listbox",
+      "aria-label": a11ySuggestionsListLabel,
+    };
+
     return (
       <div
         {...inline({ position: position || 'absolute', left, top }, style)}
         onMouseDown={onMouseDown}
         ref={containerRef}
       >
-        <ul
-          ref={this.setUlElement}
-          id={id}
-          role="listbox"
-          aria-label={a11ySuggestionsListLabel}
-          {...style('list')}
-        >
-          {this.renderSuggestions()}
-        </ul>
-
-        {this.renderLoadingIndicator()}
+        {this.props.renderDropdown ? (
+          this.props.renderDropdown({
+            ...props,
+            isLoading: this.props.isLoading,
+            children: this.renderSuggestions(),
+          })
+        ) : (
+          <ul
+            {...props}
+            {...style('list')}
+          >
+            {this.renderSuggestions()}
+          </ul>
+        )}
       </div>
     )
   }
@@ -142,15 +152,7 @@ class SuggestionsOverlay extends Component {
     )
   }
 
-  renderLoadingIndicator() {
-    if (!this.props.isLoading) {
-      return
-    }
-
-    return <LoadingIndicator style={this.props.style('loadingIndicator')} />
-  }
-
-  handleMouseEnter = (index, ev) => {
+  handleMouseEnter = index => {
     if (this.props.onMouseEnter) {
       this.props.onMouseEnter(index)
     }
