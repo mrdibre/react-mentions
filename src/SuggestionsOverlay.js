@@ -85,11 +85,21 @@ class SuggestionsOverlay extends Component {
     }
 
     const props = {
-      ref: this.setUlElement,
+      ulRef: this.setUlElement,
+      containerRef,
       id,
       role: "listbox",
       "aria-label": a11ySuggestionsListLabel,
+      onMouseDown,
     };
+
+    if (this.props.renderDropdown) {
+      return this.props.renderDropdown({
+        ...props,
+        isLoading: this.props.isLoading,
+        children: this.renderSuggestions(),
+      });
+    }
 
     return (
       <div
@@ -97,20 +107,9 @@ class SuggestionsOverlay extends Component {
         onMouseDown={onMouseDown}
         ref={containerRef}
       >
-        {this.props.renderDropdown ? (
-          this.props.renderDropdown({
-            ...props,
-            isLoading: this.props.isLoading,
-            children: this.renderSuggestions(),
-          })
-        ) : (
-          <ul
-            {...props}
-            {...style('list')}
-          >
-            {this.renderSuggestions()}
-          </ul>
-        )}
+        <ul {...props} {...style('list')}>
+          {this.renderSuggestions()}
+        </ul>
       </div>
     )
   }
