@@ -915,27 +915,26 @@ var makeTriggerRegex = function(trigger) {
       var _this$props4, _this$props$valueLink;
       return _this.props.onChange ? (_this$props4 = _this.props).onChange.apply(_this$props4, [ event ].concat(args)) : _this.props.valueLink ? (_this$props$valueLink = _this.props.valueLink).requestChange.apply(_this$props$valueLink, [ event.target.value ].concat(args)) : void 0;
     }), _defineProperty(_assertThisInitialized(_this), "handleChange", function(ev) {
-      if (isComposing = !1, (document.activeElement && document.activeElement.contentDocument || document).activeElement === ev.target) {
-        var value = _this.props.value || "", config = readConfigFromChildren(_this.props.children), newPlainTextValue = ev.target.value, newValue = applyChangeToValue(value, newPlainTextValue, {
-          selectionStartBefore: _this.state.selectionStart,
-          selectionEndBefore: _this.state.selectionEnd,
-          selectionEndAfter: ev.target.selectionEnd
-        }, config);
-        newPlainTextValue = getPlainText(newValue, config);
-        var selectionStart = ev.target.selectionStart, selectionEnd = ev.target.selectionEnd, setSelectionAfterMentionChange = !1, startOfMention = findStartOfMentionInPlainText(value, config, selectionStart);
-        void 0 !== startOfMention && _this.state.selectionEnd > startOfMention && (selectionEnd = selectionStart = startOfMention, 
-        setSelectionAfterMentionChange = !0), _this.setState({
-          selectionStart: selectionStart,
-          selectionEnd: selectionEnd,
-          setSelectionAfterMentionChange: setSelectionAfterMentionChange
-        });
-        var mentions = getMentions(newValue, config), eventMock = {
-          target: {
-            value: newValue
-          }
-        };
-        _this.executeOnChange(eventMock, newValue, newPlainTextValue, mentions);
-      }
+      isComposing = !1;
+      var value = _this.props.value || "", config = readConfigFromChildren(_this.props.children), newPlainTextValue = ev.target.value, newValue = applyChangeToValue(value, newPlainTextValue, {
+        selectionStartBefore: _this.state.selectionStart,
+        selectionEndBefore: _this.state.selectionEnd,
+        selectionEndAfter: ev.target.selectionEnd
+      }, config);
+      newPlainTextValue = getPlainText(newValue, config);
+      var selectionStart = ev.target.selectionStart, selectionEnd = ev.target.selectionEnd, setSelectionAfterMentionChange = !1, startOfMention = findStartOfMentionInPlainText(value, config, selectionStart);
+      void 0 !== startOfMention && _this.state.selectionEnd > startOfMention && (selectionEnd = selectionStart = startOfMention, 
+      setSelectionAfterMentionChange = !0), _this.setState({
+        selectionStart: selectionStart,
+        selectionEnd: selectionEnd,
+        setSelectionAfterMentionChange: setSelectionAfterMentionChange
+      });
+      var mentions = getMentions(newValue, config), eventMock = {
+        target: {
+          value: newValue
+        }
+      };
+      _this.executeOnChange(eventMock, newValue, newPlainTextValue, mentions);
     }), _defineProperty(_assertThisInitialized(_this), "handleSelect", function(ev) {
       if (_this.setState({
         selectionStart: ev.target.selectionStart,
