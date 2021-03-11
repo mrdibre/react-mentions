@@ -1441,15 +1441,7 @@ function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleChange", function (ev) {
-      isComposing = false; // if we are inside iframe, we need to find activeElement within its contentDocument
-      // const currentDocument =
-      //   (document.activeElement && document.activeElement.contentDocument) ||
-      //   document
-      // if (currentDocument.activeElement !== ev.target) {
-      //   // fix an IE bug (blur from empty input element with placeholder attribute trigger "input" event)
-      //   return
-      // }
-
+      isComposing = false;
       var value = _this.props.value || '';
       var config = readConfigFromChildren(_this.props.children);
       var newPlainTextValue = ev.target.value; // Derive the new value to set by applying the local change in the textarea's plain text

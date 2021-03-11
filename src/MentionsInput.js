@@ -488,14 +488,6 @@ class MentionsInput extends React.Component {
   // Handle input element's change event
   handleChange = (ev) => {
     isComposing = false
-    // if we are inside iframe, we need to find activeElement within its contentDocument
-    // const currentDocument =
-    //   (document.activeElement && document.activeElement.contentDocument) ||
-    //   document
-    // if (currentDocument.activeElement !== ev.target) {
-    //   // fix an IE bug (blur from empty input element with placeholder attribute trigger "input" event)
-    //   return
-    // }
 
     const value = this.props.value || ''
     const config = readConfigFromChildren(this.props.children)
